@@ -79,104 +79,13 @@ body{
 .section-title{font-size:13px;font-weight:700;color:var(--foreground);}
 .section-copy{margin-top:4px;font-size:12px;color:var(--muted-foreground);}
 
-/* ---- Shell ---- */
-.shell{display:flex;height:100dvh;width:100%;}
 
-.sidebar{
-  width:208px;min-width:208px;
-  background:linear-gradient(160deg,#072e2a 0%,#0d5c50 55%,#10786a 100%);
-  color:var(--sidebar-foreground);
-  display:flex;flex-direction:column;
-  padding:14px 10px;
-  position:relative;
-  overflow:hidden;
-  transition:width .2s ease;
-}
-.sidebar.collapsed{width:48px;min-width:48px;padding:14px 6px;}
-.sidebar::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08), transparent 60%);
-  pointer-events:none;
-}
-.brand{
-  display:flex;align-items:center;gap:8px;
-  padding:0 6px 14px 6px;margin-bottom:10px;
-  border-bottom:1px solid rgba(255,255,255,0.12);
-  white-space:nowrap;overflow:hidden;
-}
-.brand-mark{
-  width:22px;height:22px;border-radius:6px;flex:none;
-  background:linear-gradient(135deg, oklch(0.55 0.14 168), oklch(0.42 0.12 168));
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:11px;color:white;
-}
-.brand-name{font-size:13px;font-weight:700;letter-spacing:.01em;}
-.brand-sub{font-size:9px;color:rgba(255,255,255,0.5);margin-top:1px;}
-
-.nav-group-label{
-  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
-  color:rgba(255,255,255,0.4);
-  padding:10px 8px 4px 8px;
-  white-space:nowrap;overflow:hidden;
-}
-.nav-item{
-  display:flex;align-items:center;gap:9px;
-  padding:7px 8px;margin:1px 0;border-radius:6px;
-  font-size:11px;font-weight:600;color:rgba(255,255,255,0.75);
-  cursor:pointer;white-space:nowrap;overflow:hidden;
-  transition:background-color .15s ease, color .15s ease;
-}
-.nav-item svg{flex:none;width:15px;height:15px;opacity:.85;}
-.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
-.nav-item.active{background:rgba(255,255,255,0.14);color:#fff;}
-.nav-item.active svg{opacity:1;}
-
-.sidebar-foot{
-  margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,255,255,0.12);
-  display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;
-}
-.collapse-btn{
-  position:absolute;top:14px;right:8px;
-  width:18px;height:18px;border-radius:5px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);
-  cursor:pointer;font-size:11px;border:none;
-}
-.sidebar.collapsed .brand-name,.sidebar.collapsed .brand-sub,
-.sidebar.collapsed .nav-group-label,.sidebar.collapsed .nav-label,
-.sidebar.collapsed .sidebar-foot-text{display:none;}
-.sidebar.collapsed .brand{justify-content:center;}
-.sidebar.collapsed .nav-item{justify-content:center;}
-
-/* ---- Main / Navbar ---- */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;height:100dvh;background:var(--background);}
-.navbar{
-  position:absolute;left:208px;right:0;top:0;height:56px;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 20px;
-  background:transparent;
-  transition:background-color .2s ease, box-shadow .2s ease;
-  z-index:20;
-}
-.navbar.scrolled{background:#fff;box-shadow:0 1px 3px 0 rgba(0,0,0,0.06);}
-.breadcrumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted-foreground);font-weight:600;}
-.breadcrumb b{color:var(--foreground);font-weight:700;}
-.navbar-right{display:flex;align-items:center;gap:12px;}
-.icon-btn{
-  width:26px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;
-  color:var(--muted-foreground);cursor:pointer;background:transparent;border:none;
-}
-.icon-btn:hover{background:var(--accent);color:var(--foreground);}
-.avatar{
-  width:26px;height:26px;border-radius:999px;
-  background:linear-gradient(135deg, oklch(0.55 0.14 168), oklch(0.42 0.12 168));
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:700;
-  box-shadow:0 0 0 2px oklch(0.55 0.14 168 / 25%);
-}
-
-.content{flex:1;overflow-y:auto;padding-top:56px;}
-.page{padding:18px 22px 40px 22px;display:none;}
+/* ---- Main ---- */
+.main{display:flex;flex-direction:column;height:100dvh;width:100%;background:var(--background);}
+.content{flex:1;overflow-y:auto;}
+.page-shell{padding:18px 22px 0 22px;}
+.page{padding:0 22px 40px 22px;display:none;}
+.content{padding-top:2px;}
 .page.active{display:block;}
 
 /* ---- Tabs ---- */
@@ -190,6 +99,7 @@ body{
   content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;
   background:var(--tab-accent);border-radius:2px;
 }
+#page-tabs{padding:18px 22px 0 22px;margin-bottom:18px;}
 
 /* ---- Cards ---- */
 .card{
@@ -334,60 +244,16 @@ svg{display:block;}
 </head>
 <body>
 
-<div class="shell">
+<main class="main">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar" id="sidebar">
-    <button class="collapse-btn" id="collapseBtn" title="Collapse sidebar">‹</button>
-    <div class="brand">
-      <div class="brand-mark">R</div>
-      <div>
-        <div class="brand-name">Rytail</div>
-        <div class="brand-sub">Agentic Retail Platform</div>
-      </div>
-    </div>
+  <!-- PAGE NAV TABS -->
+  <div class="tabs" id="page-tabs">
+    <button class="tab-btn active" data-page="overview">Overview</button>
+    <button class="tab-btn" data-page="tasks">Task Workflow</button>
+    <button class="tab-btn" data-page="agents">Agent Directory</button>
+  </div>
 
-    <div class="nav-group-label">Cycle App</div>
-    <div class="nav-item active" data-page="overview">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
-      <span class="nav-label">Overview</span>
-    </div>
-    <div class="nav-item" data-page="tasks">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span class="nav-label">Task Workflow</span>
-    </div>
-    <div class="nav-item" data-page="agents">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/><circle cx="19" cy="7" r="1.6"/><circle cx="5" cy="7" r="1.6"/></svg>
-      <span class="nav-label">Agent Directory</span>
-    </div>
-
-    <div class="sidebar-foot">
-      <div class="avatar" style="width:24px;height:24px;font-size:9px;">PH</div>
-      <div class="sidebar-foot-text">
-        <div style="font-size:11px;font-weight:700;">Priya H.</div>
-        <div style="font-size:9px;color:rgba(255,255,255,0.5);">Planning Orchestrator</div>
-      </div>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main">
-    <div class="navbar" id="navbar">
-      <div class="breadcrumb">
-        <span>Cycles</span> <span>/</span> <b id="crumbCurrent">Overview</b>
-      </div>
-      <div class="navbar-right">
-        <button class="icon-btn" title="Search">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
-        </button>
-        <button class="icon-btn" title="Notifications">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        </button>
-        <div class="avatar">PH</div>
-      </div>
-    </div>
-
-    <div class="content" id="content">
+  <div class="content" id="content">
 
       <!-- PAGE 1: OVERVIEW -->
       <section class="page active" id="page-overview">
@@ -461,8 +327,7 @@ svg{display:block;}
       </section>
 
     </div>
-  </main>
-</div>
+</main>
 
 <!-- DRAWER -->
 <div class="overlay" id="overlay"></div>
@@ -733,17 +598,15 @@ document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 document.getElementById('overlay').addEventListener('click', closeDrawer);
 
 // ---------- page navigation ----------
-const crumbLabels = { overview: 'Overview', tasks: 'Task Workflow', agents: 'Agent Directory' };
 function goToPage(pageId){
   document.querySelectorAll('.page').forEach(p=> p.classList.remove('active'));
   document.getElementById('page-'+pageId).classList.add('active');
-  document.querySelectorAll('.nav-item[data-page]').forEach(n=>{
+  document.querySelectorAll('#page-tabs .tab-btn').forEach(n=>{
     n.classList.toggle('active', n.dataset.page === pageId);
   });
-  document.getElementById('crumbCurrent').textContent = crumbLabels[pageId];
   document.getElementById('content').scrollTop = 0;
 }
-document.querySelectorAll('.nav-item[data-page]').forEach(item=>{
+document.querySelectorAll('#page-tabs .tab-btn').forEach(item=>{
   item.addEventListener('click', ()=> goToPage(item.dataset.page));
 });
 
@@ -755,18 +618,6 @@ document.querySelectorAll('#agent-class-tabs .tab-btn').forEach(btn=>{
     activeAgentClassFilter = btn.dataset.class;
     renderAgentCards();
   });
-});
-
-// ---------- sidebar collapse ----------
-document.getElementById('collapseBtn').addEventListener('click', ()=>{
-  const sb = document.getElementById('sidebar');
-  sb.classList.toggle('collapsed');
-  document.getElementById('collapseBtn').textContent = sb.classList.contains('collapsed') ? '›' : '‹';
-});
-
-// ---------- navbar scroll effect ----------
-document.getElementById('content').addEventListener('scroll', (e)=>{
-  document.getElementById('navbar').classList.toggle('scrolled', e.target.scrollTop > 4);
 });
 
 // ---------- init ----------
