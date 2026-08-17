@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rytail — Pre-Season Merchandise Planning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root{
+  --font-sans:'Montserrat', sans-serif;
+  --spacing:0.19rem;
+  --radius:0.625rem;
+  --radius-sm:calc(var(--radius) * 0.6);
+  --radius-md:calc(var(--radius) * 0.8);
+  --radius-lg:var(--radius);
+  --radius-xl:calc(var(--radius) * 1.4);
+  --radius-2xl:calc(var(--radius) * 1.8);
+  --radius-4xl:calc(var(--radius) * 2.6);
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  --sidebar:#023139;
+  --sidebar-accent:#0b6861;
+  --sidebar-primary: oklch(0.60 0.12 168);
+  --sidebar-foreground: oklch(0.985 0 0);
+
+  --color-success: oklch(0.6 0.14 155);
+  --color-warning: oklch(0.75 0.15 80);
+  --color-violet: oklch(0.55 0.18 295);
+  --color-aqua: oklch(0.65 0.12 200);
+  --color-danger: var(--destructive);
+
+  --tab-accent: oklch(0.45 0.16 265);
+  --teal-hover-bg: oklch(0.97 0.01 168);
+  --teal-avatar: oklch(0.55 0.14 168);
+  --teal-avatar-2: oklch(0.42 0.12 168);
+}
+
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:var(--font-sans);
+  background:var(--background);
+  color:var(--foreground);
+  font-size:12px;
+  font-weight:500;
+  overflow:hidden;
+  height:100dvh;
+}
+::-webkit-scrollbar{display:none;}
+*{scrollbar-width:none;}
+
+.rytail-tiny{font-size:8px;}
+.rytail-small{font-size:9px;}
+.rytail-standard{font-size:10px;}
+.rytail-large{font-size:13px;}
+.label{
+  font-size:10px;font-weight:700;text-transform:uppercase;
+  letter-spacing:0.05em;color:var(--muted-foreground);
+}
+.section-title{font-size:13px;font-weight:700;color:var(--foreground);}
+.section-copy{margin-top:4px;font-size:12px;color:var(--muted-foreground);}
+
+/* ---- Shell ---- */
+.shell{display:flex;height:100dvh;width:100%;}
+
+.sidebar{
+  width:208px;min-width:208px;
+  background:linear-gradient(160deg,#072e2a 0%,#0d5c50 55%,#10786a 100%);
+  color:var(--sidebar-foreground);
+  display:flex;flex-direction:column;
+  padding:14px 10px;
+  position:relative;
+  overflow:hidden;
+  transition:width .2s ease;
+}
+.sidebar.collapsed{width:48px;min-width:48px;padding:14px 6px;}
+.sidebar::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08), transparent 60%);
+  pointer-events:none;
+}
+.brand{
+  display:flex;align-items:center;gap:8px;
+  padding:0 6px 14px 6px;margin-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,0.12);
+  white-space:nowrap;overflow:hidden;
+}
+.brand-mark{
+  width:22px;height:22px;border-radius:6px;flex:none;
+  background:linear-gradient(135deg, oklch(0.55 0.14 168), oklch(0.42 0.12 168));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:11px;color:white;
+}
+.brand-name{font-size:13px;font-weight:700;letter-spacing:.01em;}
+.brand-sub{font-size:9px;color:rgba(255,255,255,0.5);margin-top:1px;}
+
+.nav-group-label{
+  font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  color:rgba(255,255,255,0.4);
+  padding:10px 8px 4px 8px;
+  white-space:nowrap;overflow:hidden;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  padding:7px 8px;margin:1px 0;border-radius:6px;
+  font-size:11px;font-weight:600;color:rgba(255,255,255,0.75);
+  cursor:pointer;white-space:nowrap;overflow:hidden;
+  transition:background-color .15s ease, color .15s ease;
+}
+.nav-item svg{flex:none;width:15px;height:15px;opacity:.85;}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:rgba(255,255,255,0.14);color:#fff;}
+.nav-item.active svg{opacity:1;}
+
+.sidebar-foot{
+  margin-top:auto;padding-top:10px;border-top:1px solid rgba(255,255,255,0.12);
+  display:flex;align-items:center;gap:8px;white-space:nowrap;overflow:hidden;
+}
+.collapse-btn{
+  position:absolute;top:14px;right:8px;
+  width:18px;height:18px;border-radius:5px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);
+  cursor:pointer;font-size:11px;border:none;
+}
+.sidebar.collapsed .brand-name,.sidebar.collapsed .brand-sub,
+.sidebar.collapsed .nav-group-label,.sidebar.collapsed .nav-label,
+.sidebar.collapsed .sidebar-foot-text{display:none;}
+.sidebar.collapsed .brand{justify-content:center;}
+.sidebar.collapsed .nav-item{justify-content:center;}
+
+/* ---- Main / Navbar ---- */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;height:100dvh;background:var(--background);}
+.navbar{
+  position:absolute;left:208px;right:0;top:0;height:56px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  background:transparent;
+  transition:background-color .2s ease, box-shadow .2s ease;
+  z-index:20;
+}
+.navbar.scrolled{background:#fff;box-shadow:0 1px 3px 0 rgba(0,0,0,0.06);}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted-foreground);font-weight:600;}
+.breadcrumb b{color:var(--foreground);font-weight:700;}
+.navbar-right{display:flex;align-items:center;gap:12px;}
+.icon-btn{
+  width:26px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  color:var(--muted-foreground);cursor:pointer;background:transparent;border:none;
+}
+.icon-btn:hover{background:var(--accent);color:var(--foreground);}
+.avatar{
+  width:26px;height:26px;border-radius:999px;
+  background:linear-gradient(135deg, oklch(0.55 0.14 168), oklch(0.42 0.12 168));
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;
+  box-shadow:0 0 0 2px oklch(0.55 0.14 168 / 25%);
+}
+
+.content{flex:1;overflow-y:auto;padding-top:56px;}
+.page{padding:18px 22px 40px 22px;display:none;}
+.page.active{display:block;}
+
+/* ---- Tabs ---- */
+.tabs{display:flex;gap:18px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.tab-btn{
+  position:relative;padding:8px 2px;background:none;border:none;cursor:pointer;
+  font-size:11px;font-weight:700;color:var(--muted-foreground);
+}
+.tab-btn.active{color:var(--foreground);}
+.tab-btn.active::after{
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;
+  background:var(--tab-accent);border-radius:2px;
+}
+
+/* ---- Cards ---- */
+.card{
+  background:var(--card);border:none;border-radius:var(--radius-lg);
+  box-shadow:0 1px 2px rgba(0,0,0,0.04), 0 1px 6px rgba(0,0,0,0.04);
+  padding:12px;
+}
+.card.bordered{box-shadow:none;border:1px solid var(--border);}
+.card-title{font-size:12px;font-weight:600;color:var(--foreground);}
+.card-desc{font-size:11px;color:var(--muted-foreground);margin-top:2px;}
+
+.stat-card{
+  border-radius:var(--radius-lg);padding:14px;position:relative;overflow:hidden;
+  box-shadow:0 1px 2px rgba(0,0,0,0.04), 0 1px 6px rgba(0,0,0,0.04);
+  background:var(--card);
+}
+.stat-label{font-size:11px;font-weight:600;color:var(--muted-foreground);}
+.stat-value{font-size:22px;font-weight:800;margin-top:4px;color:var(--foreground);}
+
+.grid{display:grid;gap:12px;}
+.grid-4{grid-template-columns:repeat(4,1fr);}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+
+/* ---- Hero / cycle header ---- */
+.hero{
+  border-radius:var(--radius-xl);
+  background:linear-gradient(160deg,#072e2a 0%,#0d5c50 55%,#10786a 100%);
+  color:#fff;padding:20px 22px;position:relative;overflow:hidden;
+  box-shadow:0 4px 18px rgba(4,40,36,0.25);
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 85% 0%, rgba(255,255,255,0.12), transparent 55%);
+}
+.hero-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,0.6);}
+.hero-title{font-size:18px;font-weight:800;margin-top:4px;}
+.hero-intro{font-size:11.5px;color:rgba(255,255,255,0.8);margin-top:8px;max-width:640px;line-height:1.5;}
+.hero-bullets{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.hero-chip{
+  font-size:10px;font-weight:600;color:#fff;background:rgba(255,255,255,0.12);
+  padding:5px 9px;border-radius:999px;border:1px solid rgba(255,255,255,0.15);
+}
+
+/* ---- Badges ---- */
+.badge{
+  height:16px;display:inline-flex;align-items:center;padding:0 8px;border-radius:var(--radius-4xl);
+  font-size:10px;font-weight:700;white-space:nowrap;
+}
+.badge-draft{background:oklch(0.75 0.15 80 / 15%);color:oklch(0.5 0.13 80);}
+.badge-suggest{background:oklch(0.65 0.12 200 / 15%);color:oklch(0.42 0.1 200);}
+.badge-auto{background:oklch(0.6 0.14 155 / 15%);color:oklch(0.38 0.11 155);}
+.badge-neutral{background:var(--muted);color:var(--muted-foreground);}
+.badge-teal{background:oklch(0.92 0.02 168);color:oklch(0.30 0.08 168);}
+.badge-class-platform{background:oklch(0.55 0.18 295 / 12%);color:oklch(0.4 0.16 295);}
+.badge-class-domain{background:oklch(0.45 0.16 265 / 12%);color:oklch(0.4 0.15 265);}
+
+/* ---- Buttons ---- */
+.btn{
+  height:26px;padding:0 12px;border-radius:var(--radius-lg);font-size:12px;font-weight:500;
+  display:inline-flex;align-items:center;gap:6px;cursor:pointer;border:none;
+  transition:background-color .15s ease;
+}
+.btn:active{transform:translateY(1px);}
+.btn-primary{background:var(--primary);color:var(--primary-foreground);}
+.btn-primary:hover{background:oklch(0.29 0 0);}
+.btn-outline{background:transparent;color:var(--foreground);border:1px solid var(--border);}
+.btn-outline:hover{background:var(--accent);}
+.btn-xs{height:20px;font-size:10px;padding:0 8px;}
+
+/* ---- Dept pills row ---- */
+.dept-row{display:flex;gap:8px;margin:16px 0 4px 0;flex-wrap:wrap;}
+.dept-pill{
+  padding:6px 12px;border-radius:var(--radius-4xl);font-size:11px;font-weight:700;
+  border:1px solid var(--border);color:var(--muted-foreground);cursor:pointer;background:var(--card);
+}
+.dept-pill.active{background:oklch(0.97 0.01 168);color:oklch(0.30 0.08 168);border-color:oklch(0.85 0.04 168);}
+
+/* ---- Table ---- */
+.table-shell{overflow-x:auto;border-radius:var(--radius-md);border:1px solid var(--border);}
+.data-table{width:100%;border-collapse:collapse;font-size:11px;}
+.data-table thead th{
+  text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;
+  color:oklch(0.30 0.08 168);background:oklch(0.92 0.02 168);padding:7px 10px;
+}
+.data-table tbody tr{border-top:1px solid var(--border);cursor:pointer;}
+.data-table tbody tr:hover{background:var(--teal-hover-bg);}
+.data-table td{padding:8px 10px;vertical-align:top;color:var(--foreground);}
+.task-what{color:var(--muted-foreground);font-size:11px;max-width:340px;}
+.task-owner{font-size:11px;color:var(--foreground);white-space:nowrap;}
+.agent-count-pill{
+  font-size:10px;font-weight:700;color:oklch(0.30 0.08 168);background:oklch(0.92 0.02 168);
+  border-radius:999px;padding:2px 8px;
+}
+
+/* ---- Agent grid ---- */
+.agent-card{
+  border-radius:var(--radius-lg);border:1px solid var(--border);padding:12px;background:var(--card);
+  display:flex;flex-direction:column;gap:8px;cursor:pointer;
+  transition:box-shadow .15s ease, border-color .15s ease;
+}
+.agent-card:hover{box-shadow:0 2px 10px rgba(0,0,0,0.06);border-color:oklch(0.85 0.04 168);}
+.agent-top{display:flex;align-items:center;gap:8px;}
+.agent-avatar{
+  width:28px;height:28px;border-radius:999px;flex:none;
+  background:linear-gradient(135deg, oklch(0.55 0.14 168), oklch(0.42 0.12 168));
+  color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;
+}
+.agent-name{font-size:12px;font-weight:700;color:var(--foreground);}
+.agent-id{font-size:10px;color:var(--muted-foreground);}
+.agent-desc{font-size:11px;color:var(--muted-foreground);line-height:1.5;}
+.tool-chip{
+  font-size:10px;font-weight:600;background:var(--muted);color:var(--muted-foreground);
+  padding:3px 8px;border-radius:999px;
+}
+.tool-row{display:flex;flex-wrap:wrap;gap:5px;}
+
+/* ---- Drawer ---- */
+.overlay{
+  position:fixed;inset:0;background:rgba(2,20,20,0.35);z-index:90;display:none;
+}
+.overlay.open{display:block;}
+.drawer{
+  position:fixed;top:0;right:-420px;width:400px;height:100dvh;background:#fff;z-index:100;
+  box-shadow:-8px 0 30px rgba(0,0,0,0.12);transition:right .22s ease;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.drawer.open{right:0;}
+.drawer-head{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;}
+.drawer-body{padding:16px 18px;overflow-y:auto;flex:1;}
+.drawer-close{cursor:pointer;color:var(--muted-foreground);background:none;border:none;font-size:16px;}
+
+.divider{height:1px;background:var(--border);margin:14px 0;}
+
+.empty-note{font-size:11px;color:var(--muted-foreground);font-style:normal;}
+.bullet-list{margin:6px 0 0 0;padding-left:14px;}
+.bullet-list li{font-size:11px;color:var(--muted-foreground);margin-bottom:4px;line-height:1.5;}
+
+.icon{display:inline-flex;}
+svg{display:block;}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <button class="collapse-btn" id="collapseBtn" title="Collapse sidebar">‹</button>
+    <div class="brand">
+      <div class="brand-mark">R</div>
+      <div>
+        <div class="brand-name">Rytail</div>
+        <div class="brand-sub">Agentic Retail Platform</div>
+      </div>
+    </div>
+
+    <div class="nav-group-label">Cycle App</div>
+    <div class="nav-item active" data-page="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg>
+      <span class="nav-label">Overview</span>
+    </div>
+    <div class="nav-item" data-page="tasks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+      <span class="nav-label">Task Workflow</span>
+    </div>
+    <div class="nav-item" data-page="agents">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3.2"/><path d="M5 21c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/><circle cx="19" cy="7" r="1.6"/><circle cx="5" cy="7" r="1.6"/></svg>
+      <span class="nav-label">Agent Directory</span>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar" style="width:24px;height:24px;font-size:9px;">PH</div>
+      <div class="sidebar-foot-text">
+        <div style="font-size:11px;font-weight:700;">Priya H.</div>
+        <div style="font-size:9px;color:rgba(255,255,255,0.5);">Planning Orchestrator</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="navbar" id="navbar">
+      <div class="breadcrumb">
+        <span>Cycles</span> <span>/</span> <b id="crumbCurrent">Overview</b>
+      </div>
+      <div class="navbar-right">
+        <button class="icon-btn" title="Search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        </button>
+        <button class="icon-btn" title="Notifications">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+        </button>
+        <div class="avatar">PH</div>
+      </div>
+    </div>
+
+    <div class="content" id="content">
+
+      <!-- PAGE 1: OVERVIEW -->
+      <section class="page active" id="page-overview">
+        <div class="hero">
+          <div class="hero-eyebrow">Cycle · <span id="ov-id"></span></div>
+          <div class="hero-title" id="ov-name"></div>
+          <div class="hero-intro" id="ov-intro"></div>
+          <div class="hero-bullets" id="ov-bullets"></div>
+        </div>
+
+        <div class="grid grid-4" style="margin-top:16px;">
+          <div class="stat-card">
+            <div class="stat-label">Departments</div>
+            <div class="stat-value" id="stat-depts">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tasks</div>
+            <div class="stat-value" id="stat-tasks">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Agents Engaged</div>
+            <div class="stat-value" id="stat-agents">–</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Tools In Use</div>
+            <div class="stat-value" id="stat-tools">–</div>
+          </div>
+        </div>
+
+        <div style="margin-top:18px;" class="section-title">Departments in this cycle</div>
+        <div class="section-copy">Click a department to jump into its task workflow.</div>
+        <div class="grid grid-2" id="dept-cards" style="margin-top:10px;"></div>
+      </section>
+
+      <!-- PAGE 2: TASK WORKFLOW -->
+      <section class="page" id="page-tasks">
+        <div class="section-title">Task Workflow</div>
+        <div class="section-copy">Every task in this cycle, grouped by department. Click a row to see assigned agents.</div>
+
+        <div class="dept-row" id="dept-pills"></div>
+
+        <div class="table-shell" style="margin-top:10px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:70px;">ID</th>
+                <th>Task</th>
+                <th>What happens</th>
+                <th style="width:150px;">Owner</th>
+                <th style="width:110px;">Autonomy</th>
+                <th style="width:90px;">Agents</th>
+              </tr>
+            </thead>
+            <tbody id="task-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PAGE 3: AGENT DIRECTORY -->
+      <section class="page" id="page-agents">
+        <div class="section-title">Agent Directory</div>
+        <div class="section-copy">All agents engaged in this cycle. Click a card to see its tools.</div>
+
+        <div class="tabs" id="agent-class-tabs" style="margin-top:12px;">
+          <button class="tab-btn active" data-class="all">All Agents</button>
+          <button class="tab-btn" data-class="Platform Capability">Platform Capability</button>
+          <button class="tab-btn" data-class="Domain Data">Domain Data</button>
+        </div>
+
+        <div class="grid grid-3" id="agent-cards"></div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<!-- DRAWER -->
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="label" id="drawer-eyebrow">TASK</div>
+      <div style="font-size:14px;font-weight:800;margin-top:3px;" id="drawer-title"></div>
+    </div>
+    <button class="drawer-close" id="drawerClose">✕</button>
+  </div>
+  <div class="drawer-body" id="drawer-body"></div>
+</aside>
+
+<script id="cycle-data" type="application/json">{"id": "C03", "name": "Pre-Season Merchandise Planning", "description": {"intro": "Break the corporate plan into division, department, category and option-level buy budgets (OTB).", "bullets": ["Trigger: AOP sign-off, ~6-9 months pre-season", "Cadence: Per season (2-4 / year)", "Primary output: Locked OTB, assortment & option plan", "Hands off to: C04 Design & Product Development; C05 Sourcing, Buying & Vendor Management"]}, "departments": [{"id": "D03", "name": "Merchandise Planning", "orchestrator": "Planning Orchestrator", "description": {"intro": "What the business will sell, in what quantity, at what margin, and how much money may be committed.", "bullets": ["Cycles spanned: C03 Pre-Season Merchandise Planning; C13 Finance, Controlling & Post-Season Hindsight", "Typical roles: Merchandise Planner; Category Planner; Assortment Planner; OTB Controller; Planning Head", "Tasks in this function: 7", "Problem it solves: Stops buying decisions running ahead of what the business can actually afford or sell through."]}, "tasks": [{"id": "T12", "name": "Top-Down / Bottom-Up Reconciliation", "what_happens": "The corporate target and the sum of the division plans are made to agree.", "typical_task_owner": "Planning Head", "autonomy_level": "Draft", "agents": [{"id": "AD09", "name": "Plan & Calendar Agent", "class": "Domain Data", "description": {"intro": "Season calendar, launch plan, OTB position, plan targets and the critical path dates behind them.", "bullets": ["Class: Domain Data", "Must not do (boundary): Change the plan. It reads and reports the plan of record.", "Problem it solves: Keeps every task working from the same season calendar and OTB position instead of a stale copy."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "calendar_read", "type": "Data read", "system_touched": "Planning system", "access": "Read", "description": {"intro": "Returns season, launch and critical-path dates.", "bullets": ["Type: Data read", "System touched: Planning system", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "otb_read", "type": "Data read", "system_touched": "Planning system", "access": "Read", "description": {"intro": "Returns current open-to-buy position by category and period.", "bullets": ["Type: Data read", "System touched: Planning system", "Access level: Read", "Risk if wrong: High - drives commitment decisions"]}}]}, {"id": "AD02", "name": "Sales Performance Agent", "class": "Domain Data", "description": {"intro": "Sell-through, rate of sale, velocity, conversion, size and colour performance, comparable-period results.", "bullets": ["Class: Domain Data", "Must not do (boundary): Assert stock availability. Poor sales and no stock look identical in sales data alone.", "Problem it solves: Gives every trading decision one governed read of how something is actually selling."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "performance_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes sell-through, rate of sale and velocity to the governed definition.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - feeds every trading decision"]}}, {"name": "cohort_compare", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Compares a cohort against a matched prior cohort over an equivalent period.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AP09", "name": "Explanation & Narrative Agent", "class": "Platform Capability", "description": {"intro": "Turns a numeric or model output into a reason a merchant can read, challenge and overrule.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Justify a result it cannot trace, or soften a weak recommendation.", "Problem it solves: Turns a number or model score into a reason a merchant can read, challenge and overrule - not a black box."]}, "tools": [{"name": "trace_read", "type": "Output", "system_touched": "Solver / compute runtime", "access": "Read", "description": {"intro": "Reads the execution trace of a solve or model to explain how it reached its answer.", "bullets": ["Type: Output", "System touched: Solver / compute runtime", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "narrative_generate", "type": "Output", "system_touched": "LLM runtime", "access": "Compute", "description": {"intro": "Writes the reasoning behind a recommendation in reviewable language.", "bullets": ["Type: Output", "System touched: LLM runtime", "Access level: Compute", "Risk if wrong: Medium - a fluent wrong reason is worse than none"]}}, {"name": "confidence_state", "type": "Output", "system_touched": "LLM runtime", "access": "Compute", "description": {"intro": "States the confidence and the reason for it alongside any recommendation.", "bullets": ["Type: Output", "System touched: LLM runtime", "Access level: Compute", "Risk if wrong: Medium - hiding low confidence is worse than being wrong"]}}]}]}, {"id": "T13", "name": "Category & Department Plan Build", "what_happens": "Sales, margin, ASP, intake and weekly flow are planned per category.", "typical_task_owner": "Category Planner", "autonomy_level": "Draft", "agents": [{"id": "AP01", "name": "Query & Data Retrieval Agent", "class": "Platform Capability", "description": {"intro": "Writes and runs queries against the warehouse and the semantic layer. Joins, aggregates, pivots and returns a clean dataset. The workhorse every other agent leans on.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Interpret what the numbers mean, or apply business judgement to them.", "Problem it solves: Removes the need for every other agent to know how to query the warehouse itself - one workhorse instead of 19 ad hoc query paths."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "api_fetch_erp", "type": "Data read", "system_touched": "ERP", "access": "Read", "description": {"intro": "Reads master, order and transaction data from the ERP.", "bullets": ["Type: Data read", "System touched: ERP", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "api_fetch_wms", "type": "Data read", "system_touched": "WMS", "access": "Read", "description": {"intro": "Reads stock, bin, movement and dispatch data from the warehouse system.", "bullets": ["Type: Data read", "System touched: WMS", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "api_fetch_pos", "type": "Data read", "system_touched": "POS", "access": "Read", "description": {"intro": "Reads transaction-level sales from point of sale.", "bullets": ["Type: Data read", "System touched: POS", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "vector_similarity_search", "type": "Data read", "system_touched": "Vector index", "access": "Read", "description": {"intro": "Finds the nearest comparable records by attribute embedding rather than by exact key.", "bullets": ["Type: Data read", "System touched: Vector index", "Access level: Read", "Risk if wrong: Medium - a poor match drives a poor analogue"]}}]}, {"id": "AD02", "name": "Sales Performance Agent", "class": "Domain Data", "description": {"intro": "Sell-through, rate of sale, velocity, conversion, size and colour performance, comparable-period results.", "bullets": ["Class: Domain Data", "Must not do (boundary): Assert stock availability. Poor sales and no stock look identical in sales data alone.", "Problem it solves: Gives every trading decision one governed read of how something is actually selling."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "performance_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes sell-through, rate of sale and velocity to the governed definition.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - feeds every trading decision"]}}, {"name": "cohort_compare", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Compares a cohort against a matched prior cohort over an equivalent period.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AD09", "name": "Plan & Calendar Agent", "class": "Domain Data", "description": {"intro": "Season calendar, launch plan, OTB position, plan targets and the critical path dates behind them.", "bullets": ["Class: Domain Data", "Must not do (boundary): Change the plan. It reads and reports the plan of record.", "Problem it solves: Keeps every task working from the same season calendar and OTB position instead of a stale copy."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "calendar_read", "type": "Data read", "system_touched": "Planning system", "access": "Read", "description": {"intro": "Returns season, launch and critical-path dates.", "bullets": ["Type: Data read", "System touched: Planning system", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "otb_read", "type": "Data read", "system_touched": "Planning system", "access": "Read", "description": {"intro": "Returns current open-to-buy position by category and period.", "bullets": ["Type: Data read", "System touched: Planning system", "Access level: Read", "Risk if wrong: High - drives commitment decisions"]}}]}, {"id": "AP04", "name": "Statistical Modelling Agent", "class": "Platform Capability", "description": {"intro": "Regression, clustering, similarity, elasticity, forecasting and significance testing.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Present a model output as a decision, or hide its confidence interval.", "Problem it solves: Gives every domain agent one tested way to forecast, cluster or test significance instead of each inventing its own."]}, "tools": [{"name": "stat_model_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Fits and applies a statistical model and returns output with confidence.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "forecast_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Produces a forward demand or value projection.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "cluster_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Groups records by similarity into clusters.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Low"]}}, {"name": "elasticity_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Estimates price-volume response for a group.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "significance_test", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Tests whether an observed difference is distinguishable from noise.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - the guard against acting on a random fluctuation"]}}]}]}, {"id": "T14", "name": "Assortment & Option Planning", "what_happens": "Option count, width versus depth and the good-better-best ladder are decided.", "typical_task_owner": "Assortment Planner", "autonomy_level": "Suggest", "agents": [{"id": "AD01", "name": "Product & Attribute Agent", "class": "Domain Data", "description": {"intro": "The product master, hierarchy and attributes - fabric, silhouette, sleeve, neckline, coverage, occasion, price band. Finds comparable products by attribute rather than by style code.", "bullets": ["Class: Domain Data", "Must not do (boundary): Speak to how a product performed. That belongs to Sales Performance.", "Problem it solves: Lets a brand-new style be matched to history by what it is (fabric, silhouette, occasion) rather than needing a style code that doesn't exist yet."]}, "tools": [{"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "vector_similarity_search", "type": "Data read", "system_touched": "Vector index", "access": "Read", "description": {"intro": "Finds the nearest comparable records by attribute embedding rather than by exact key.", "bullets": ["Type: Data read", "System touched: Vector index", "Access level: Read", "Risk if wrong: Medium - a poor match drives a poor analogue"]}}, {"name": "attribute_read", "type": "Data read", "system_touched": "PIM / product master", "access": "Read", "description": {"intro": "Reads the product attribute set for a style or group of styles.", "bullets": ["Type: Data read", "System touched: PIM / product master", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}]}, {"id": "AD02", "name": "Sales Performance Agent", "class": "Domain Data", "description": {"intro": "Sell-through, rate of sale, velocity, conversion, size and colour performance, comparable-period results.", "bullets": ["Class: Domain Data", "Must not do (boundary): Assert stock availability. Poor sales and no stock look identical in sales data alone.", "Problem it solves: Gives every trading decision one governed read of how something is actually selling."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "performance_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes sell-through, rate of sale and velocity to the governed definition.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - feeds every trading decision"]}}, {"name": "cohort_compare", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Compares a cohort against a matched prior cohort over an equivalent period.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AP04", "name": "Statistical Modelling Agent", "class": "Platform Capability", "description": {"intro": "Regression, clustering, similarity, elasticity, forecasting and significance testing.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Present a model output as a decision, or hide its confidence interval.", "Problem it solves: Gives every domain agent one tested way to forecast, cluster or test significance instead of each inventing its own."]}, "tools": [{"name": "stat_model_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Fits and applies a statistical model and returns output with confidence.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "forecast_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Produces a forward demand or value projection.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "cluster_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Groups records by similarity into clusters.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Low"]}}, {"name": "elasticity_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Estimates price-volume response for a group.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "significance_test", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Tests whether an observed difference is distinguishable from noise.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - the guard against acting on a random fluctuation"]}}]}]}, {"id": "T15", "name": "Price Architecture Definition", "what_happens": "Entry, core and exit price points are set per category.", "typical_task_owner": "Assortment Planner", "autonomy_level": "Suggest", "agents": [{"id": "AD06", "name": "Pricing & Margin Agent", "class": "Domain Data", "description": {"intro": "Price, realised price, discount depth, margin, elasticity and markdown history by cluster.", "bullets": ["Class: Domain Data", "Must not do (boundary): Set a price. It supplies what pricing decisions are made from.", "Problem it solves: Gives every markdown, promotion or costing decision one true read of realised price and margin."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "margin_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes gross and contribution margin after discount, freight and returns.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: High - drives markdown and allocation economics"]}}, {"name": "elasticity_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Estimates price-volume response for a group.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AD02", "name": "Sales Performance Agent", "class": "Domain Data", "description": {"intro": "Sell-through, rate of sale, velocity, conversion, size and colour performance, comparable-period results.", "bullets": ["Class: Domain Data", "Must not do (boundary): Assert stock availability. Poor sales and no stock look identical in sales data alone.", "Problem it solves: Gives every trading decision one governed read of how something is actually selling."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "performance_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes sell-through, rate of sale and velocity to the governed definition.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - feeds every trading decision"]}}, {"name": "cohort_compare", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Compares a cohort against a matched prior cohort over an equivalent period.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AP04", "name": "Statistical Modelling Agent", "class": "Platform Capability", "description": {"intro": "Regression, clustering, similarity, elasticity, forecasting and significance testing.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Present a model output as a decision, or hide its confidence interval.", "Problem it solves: Gives every domain agent one tested way to forecast, cluster or test significance instead of each inventing its own."]}, "tools": [{"name": "stat_model_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Fits and applies a statistical model and returns output with confidence.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "forecast_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Produces a forward demand or value projection.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "cluster_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Groups records by similarity into clusters.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Low"]}}, {"name": "elasticity_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Estimates price-volume response for a group.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "significance_test", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Tests whether an observed difference is distinguishable from noise.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - the guard against acting on a random fluctuation"]}}]}]}, {"id": "T16", "name": "Open-To-Buy Control", "what_happens": "Buying budget is released, held and clawed back through the season.", "typical_task_owner": "OTB Controller", "autonomy_level": "Auto + Approve", "agents": [{"id": "AD09", "name": "Plan & Calendar Agent", "class": "Domain Data", "description": {"intro": "Season calendar, launch plan, OTB position, plan targets and the critical path dates behind them.", "bullets": ["Class: Domain Data", "Must not do (boundary): Change the plan. It reads and reports the plan of record.", "Problem it solves: Keeps every task working from the same season calendar and OTB position instead of a stale copy."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "calendar_read", "type": "Data read", "system_touched": "Planning system", "access": "Read", "description": {"intro": "Returns season, launch and critical-path dates.", "bullets": ["Type: Data read", "System touched: Planning system", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "otb_read", "type": "Data read", "system_touched": "Planning system", "access": "Read", "description": {"intro": "Returns current open-to-buy position by category and period.", "bullets": ["Type: Data read", "System touched: Planning system", "Access level: Read", "Risk if wrong: High - drives commitment decisions"]}}]}, {"id": "AD03", "name": "Inventory Position Agent", "class": "Domain Data", "description": {"intro": "On-hand, in-transit, open orders, reserved, ageing buckets, cover and stock-out history by node.", "bullets": ["Class: Domain Data", "Must not do (boundary): Decide what to do about a position. It reports the position.", "Problem it solves: Gives one trusted answer to 'how much do we have, and where', so allocation, replenishment and finance stop disagreeing on stock position."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "api_fetch_wms", "type": "Data read", "system_touched": "WMS", "access": "Read", "description": {"intro": "Reads stock, bin, movement and dispatch data from the warehouse system.", "bullets": ["Type: Data read", "System touched: WMS", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "api_fetch_erp", "type": "Data read", "system_touched": "ERP", "access": "Read", "description": {"intro": "Reads master, order and transaction data from the ERP.", "bullets": ["Type: Data read", "System touched: ERP", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "ageing_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Buckets stock by age since first receipt at the node.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Low"]}}, {"name": "cover_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes weeks of cover from stock on hand and current rate of sale.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AD07", "name": "Supply & Vendor Agent", "class": "Domain Data", "description": {"intro": "Vendor capacity, lead time, reliability, minimum order quantity, pack and carton configuration.", "bullets": ["Class: Domain Data", "Must not do (boundary): Commit a purchase order.", "Problem it solves: Surfaces vendor capacity, lead time and reliability before a commitment is made, not after it slips."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "api_fetch_erp", "type": "Data read", "system_touched": "ERP", "access": "Read", "description": {"intro": "Reads master, order and transaction data from the ERP.", "bullets": ["Type: Data read", "System touched: ERP", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "vendor_score_read", "type": "Data read", "system_touched": "Vendor master", "access": "Read", "description": {"intro": "Returns the live vendor score and its quality, delivery and compliance components.", "bullets": ["Type: Data read", "System touched: Vendor master", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "pack_config_read", "type": "Data read", "system_touched": "ERP / vendor master", "access": "Read", "description": {"intro": "Returns pack, inner and carton configuration for a SKU.", "bullets": ["Type: Data read", "System touched: ERP / vendor master", "Access level: Read", "Risk if wrong: Medium"]}}]}, {"id": "AP07", "name": "Workflow & Notification Agent", "class": "Platform Capability", "description": {"intro": "Routes an artefact to the right approver, tracks the SLA, nudges the owner and escalates on breach.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Approve anything, or reassign ownership without a human saying so.", "Problem it solves: Stops an approval sitting unseen in someone's inbox with no SLA, owner or escalation."]}, "tools": [{"name": "workflow_submit_approval", "type": "Workflow", "system_touched": "Workflow engine", "access": "Write", "description": {"intro": "Submits an artefact into its approval chain with SLA tracking.", "bullets": ["Type: Workflow", "System touched: Workflow engine", "Access level: Write", "Risk if wrong: Medium"]}}, {"name": "notify_user", "type": "Output", "system_touched": "Notification service", "access": "Write", "description": {"intro": "Sends an alert or nudge to a named person or role.", "bullets": ["Type: Output", "System touched: Notification service", "Access level: Write", "Risk if wrong: Low"]}}, {"name": "escalate", "type": "Workflow", "system_touched": "Workflow engine", "access": "Write", "description": {"intro": "Raises an unresolved item to the next level with the decision needed stated.", "bullets": ["Type: Workflow", "System touched: Workflow engine", "Access level: Write", "Risk if wrong: Low"]}}, {"name": "board_item_create", "type": "Workflow", "system_touched": "Workboard", "access": "Write", "description": {"intro": "Raises an item on the owning team's workboard with an owner and due date.", "bullets": ["Type: Workflow", "System touched: Workboard", "Access level: Write", "Risk if wrong: Low"]}}]}]}, {"id": "T17", "name": "Store Grading & Clustering", "what_happens": "Stores are grouped into the units that planning and allocation act on.", "typical_task_owner": "Merchandise Planner", "autonomy_level": "Draft", "agents": [{"id": "AD04", "name": "Store & Network Agent", "class": "Domain Data", "description": {"intro": "Store master, grade, cluster, catchment profile, floor and fixture capacity, climate zone, opening date.", "bullets": ["Class: Domain Data", "Must not do (boundary): Allocate. It describes the network the allocation lands on.", "Problem it solves: Stops an allocation or capacity decision being made against a store's actual capability, footprint or fixture."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "geo_lookup", "type": "Data read", "system_touched": "Geo reference", "access": "Read", "description": {"intro": "Returns geography, climate zone and catchment reference data for a location.", "bullets": ["Type: Data read", "System touched: Geo reference", "Access level: Read", "Risk if wrong: Low"]}}, {"name": "capacity_read", "type": "Data read", "system_touched": "Store master", "access": "Read", "description": {"intro": "Returns floor, fixture and backroom capacity for a store.", "bullets": ["Type: Data read", "System touched: Store master", "Access level: Read", "Risk if wrong: Medium - drives over-allocation if stale"]}}]}, {"id": "AD02", "name": "Sales Performance Agent", "class": "Domain Data", "description": {"intro": "Sell-through, rate of sale, velocity, conversion, size and colour performance, comparable-period results.", "bullets": ["Class: Domain Data", "Must not do (boundary): Assert stock availability. Poor sales and no stock look identical in sales data alone.", "Problem it solves: Gives every trading decision one governed read of how something is actually selling."]}, "tools": [{"name": "sql_query", "type": "Data read", "system_touched": "Data warehouse", "access": "Read", "description": {"intro": "Runs a parameterised query against the warehouse and returns a result set.", "bullets": ["Type: Data read", "System touched: Data warehouse", "Access level: Read", "Risk if wrong: Low - wrong query gives a wrong answer, caught by review"]}}, {"name": "semantic_lookup", "type": "Data read", "system_touched": "Semantic layer", "access": "Read", "description": {"intro": "Resolves a business term to its governed metric definition and underlying fields.", "bullets": ["Type: Data read", "System touched: Semantic layer", "Access level: Read", "Risk if wrong: Medium - a wrong resolution silently changes what a number means"]}}, {"name": "performance_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Computes sell-through, rate of sale and velocity to the governed definition.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - feeds every trading decision"]}}, {"name": "cohort_compare", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Compares a cohort against a matched prior cohort over an equivalent period.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}]}, {"id": "AP04", "name": "Statistical Modelling Agent", "class": "Platform Capability", "description": {"intro": "Regression, clustering, similarity, elasticity, forecasting and significance testing.", "bullets": ["Class: Platform Capability", "Must not do (boundary): Present a model output as a decision, or hide its confidence interval.", "Problem it solves: Gives every domain agent one tested way to forecast, cluster or test significance instead of each inventing its own."]}, "tools": [{"name": "stat_model_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Fits and applies a statistical model and returns output with confidence.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "forecast_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Produces a forward demand or value projection.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "cluster_run", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Groups records by similarity into clusters.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Low"]}}, {"name": "elasticity_calc", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Estimates price-volume response for a group.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium"]}}, {"name": "significance_test", "type": "Compute", "system_touched": "Compute runtime", "access": "Compute", "description": {"intro": "Tests whether an observed difference is distinguishable from noise.", "bullets": ["Type: Compute", "System touched: Compute runtime", "Access level: Compute", "Risk if wrong: Medium - the guard against acting on a random fluctuation"]}}]}]}]}]}</script>
+<script>
+const CYCLE = JSON.parse(document.getElementById('cycle-data').textContent);
+
+// ---------- helpers ----------
+function el(tag, cls, html){
+  const e = document.createElement(tag);
+  if(cls) e.className = cls;
+  if(html !== undefined) e.innerHTML = html;
+  return e;
+}
+function autonomyBadgeClass(level){
+  if(!level) return 'badge-neutral';
+  const l = level.toLowerCase();
+  if(l.includes('draft')) return 'badge-draft';
+  if(l.includes('suggest')) return 'badge-suggest';
+  if(l.includes('auto')) return 'badge-auto';
+  return 'badge-neutral';
+}
+function classBadgeClass(cls){
+  return cls === 'Platform Capability' ? 'badge-class-platform' : 'badge-class-domain';
+}
+function initials(name){
+  return name.split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
+// ---------- flatten data ----------
+const allTasks = [];
+const agentMap = new Map(); // id -> {id,name,class,description,tools:Map}
+CYCLE.departments.forEach(dept=>{
+  dept.tasks.forEach(task=>{
+    allTasks.push({dept, task});
+    task.agents.forEach(agent=>{
+      if(!agentMap.has(agent.id)){
+        agentMap.set(agent.id, {
+          id: agent.id, name: agent.name, class: agent.class,
+          description: agent.description, tools: new Map(), taskIds:new Set()
+        });
+      }
+      const a = agentMap.get(agent.id);
+      a.taskIds.add(task.id);
+      agent.tools.forEach(t=> a.tools.set(t.name, t));
+    });
+  });
+});
+const allAgents = Array.from(agentMap.values());
+const allToolNames = new Set();
+allAgents.forEach(a=> a.tools.forEach((v,k)=> allToolNames.add(k)));
+
+// ---------- PAGE: OVERVIEW ----------
+function renderOverview(){
+  document.getElementById('ov-id').textContent = CYCLE.id;
+  document.getElementById('ov-name').textContent = CYCLE.name;
+  document.getElementById('ov-intro').textContent = CYCLE.description.intro;
+
+  const bulletsWrap = document.getElementById('ov-bullets');
+  bulletsWrap.innerHTML = '';
+  (CYCLE.description.bullets || []).forEach(b=>{
+    bulletsWrap.appendChild(el('div','hero-chip', b));
+  });
+
+  document.getElementById('stat-depts').textContent = CYCLE.departments.length;
+  document.getElementById('stat-tasks').textContent = allTasks.length;
+  document.getElementById('stat-agents').textContent = allAgents.length;
+  document.getElementById('stat-tools').textContent = allToolNames.size;
+
+  const deptWrap = document.getElementById('dept-cards');
+  deptWrap.innerHTML = '';
+  CYCLE.departments.forEach(dept=>{
+    const card = el('div','card bordered');
+    card.style.cursor = 'pointer';
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div class="card-title">${dept.name}</div>
+          <div class="card-desc">${dept.description.intro || ''}</div>
+        </div>
+        <span class="badge badge-teal">${dept.tasks.length} tasks</span>
+      </div>
+      <div class="section-copy" style="margin-top:8px;font-size:10px;">Orchestrator: <b style="color:var(--foreground)">${dept.orchestrator || '—'}</b></div>
+    `;
+    card.addEventListener('click', ()=>{
+      goToPage('tasks');
+      setActiveDeptPill(dept.id);
+    });
+    deptWrap.appendChild(card);
+  });
+}
+
+// ---------- PAGE: TASK WORKFLOW ----------
+let activeDeptFilter = 'all';
+
+function renderDeptPills(){
+  const wrap = document.getElementById('dept-pills');
+  wrap.innerHTML = '';
+  const allPill = el('div','dept-pill active','All Departments');
+  allPill.dataset.dept = 'all';
+  wrap.appendChild(allPill);
+  CYCLE.departments.forEach(dept=>{
+    const pill = el('div','dept-pill', dept.name);
+    pill.dataset.dept = dept.id;
+    wrap.appendChild(pill);
+  });
+  wrap.querySelectorAll('.dept-pill').forEach(p=>{
+    p.addEventListener('click', ()=> setActiveDeptPill(p.dataset.dept));
+  });
+}
+
+function setActiveDeptPill(deptId){
+  activeDeptFilter = deptId;
+  document.querySelectorAll('.dept-pill').forEach(p=>{
+    p.classList.toggle('active', p.dataset.dept === deptId);
+  });
+  renderTaskRows();
+}
+
+function renderTaskRows(){
+  const tbody = document.getElementById('task-rows');
+  tbody.innerHTML = '';
+  const rows = allTasks.filter(({dept}) => activeDeptFilter === 'all' || dept.id === activeDeptFilter);
+  rows.forEach(({dept, task})=>{
+    const tr = el('tr');
+    tr.innerHTML = `
+      <td><span class="rytail-standard" style="color:var(--muted-foreground);font-weight:700;">${task.id}</span></td>
+      <td><b>${task.name}</b><div class="rytail-standard" style="color:var(--muted-foreground);margin-top:2px;">${dept.name}</div></td>
+      <td class="task-what">${task.what_happens}</td>
+      <td class="task-owner">${task.typical_task_owner}</td>
+      <td><span class="badge ${autonomyBadgeClass(task.autonomy_level)}">${task.autonomy_level}</span></td>
+      <td><span class="agent-count-pill">${task.agents.length} agent${task.agents.length===1?'':'s'}</span></td>
+    `;
+    tr.addEventListener('click', ()=> openTaskDrawer(dept, task));
+    tbody.appendChild(tr);
+  });
+}
+
+function openTaskDrawer(dept, task){
+  document.getElementById('drawer-eyebrow').textContent = `TASK · ${task.id}`;
+  document.getElementById('drawer-title').textContent = task.name;
+  const body = document.getElementById('drawer-body');
+  body.innerHTML = `
+    <div class="rytail-standard" style="color:var(--muted-foreground);font-weight:700;text-transform:uppercase;letter-spacing:.04em;">${dept.name}</div>
+    <div class="section-copy" style="margin-top:6px;">${task.what_happens}</div>
+    <div style="display:flex;gap:16px;margin-top:14px;">
+      <div>
+        <div class="label">Owner</div>
+        <div style="font-size:12px;font-weight:700;margin-top:2px;">${task.typical_task_owner}</div>
+      </div>
+      <div>
+        <div class="label">Autonomy</div>
+        <div style="margin-top:4px;"><span class="badge ${autonomyBadgeClass(task.autonomy_level)}">${task.autonomy_level}</span></div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="label">Agents assigned (${task.agents.length})</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      ${task.agents.map(a=>`
+        <div class="card bordered" style="cursor:pointer;" data-agent-id="${a.id}">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="agent-avatar">${initials(a.name)}</div>
+            <div>
+              <div style="font-size:11.5px;font-weight:700;">${a.name}</div>
+              <span class="badge ${classBadgeClass(a.class)}" style="margin-top:2px;">${a.class}</span>
+            </div>
+          </div>
+          <div class="tool-row" style="margin-top:8px;">
+            ${a.tools.slice(0,4).map(t=>`<span class="tool-chip">${t.name}</span>`).join('')}
+            ${a.tools.length>4 ? `<span class="tool-chip">+${a.tools.length-4} more</span>` : ''}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  body.querySelectorAll('[data-agent-id]').forEach(node=>{
+    node.addEventListener('click', ()=>{
+      const agent = agentMap.get(node.dataset.agentId);
+      openAgentDrawer(agent);
+    });
+  });
+  openDrawer();
+}
+
+// ---------- PAGE: AGENT DIRECTORY ----------
+let activeAgentClassFilter = 'all';
+
+function renderAgentCards(){
+  const wrap = document.getElementById('agent-cards');
+  wrap.innerHTML = '';
+  const list = allAgents.filter(a => activeAgentClassFilter === 'all' || a.class === activeAgentClassFilter);
+  list.forEach(agent=>{
+    const tools = Array.from(agent.tools.values());
+    const card = el('div','agent-card');
+    card.innerHTML = `
+      <div class="agent-top">
+        <div class="agent-avatar">${initials(agent.name)}</div>
+        <div>
+          <div class="agent-name">${agent.name}</div>
+          <div class="agent-id">${agent.id} · <span class="badge ${classBadgeClass(agent.class)}">${agent.class}</span></div>
+        </div>
+      </div>
+      <div class="agent-desc">${(agent.description.intro||'').slice(0,120)}${(agent.description.intro||'').length>120?'…':''}</div>
+      <div class="tool-row">
+        ${tools.slice(0,4).map(t=>`<span class="tool-chip">${t.name}</span>`).join('')}
+        ${tools.length>4 ? `<span class="tool-chip">+${tools.length-4} more</span>` : ''}
+      </div>
+      <div class="rytail-standard" style="color:var(--muted-foreground);margin-top:2px;">Used in ${agent.taskIds.size} task${agent.taskIds.size===1?'':'s'}</div>
+    `;
+    card.addEventListener('click', ()=> openAgentDrawer(agent));
+    wrap.appendChild(card);
+  });
+}
+
+function openAgentDrawer(agent){
+  const tools = Array.from(agent.tools.values());
+  document.getElementById('drawer-eyebrow').textContent = `AGENT · ${agent.id}`;
+  document.getElementById('drawer-title').textContent = agent.name;
+  const body = document.getElementById('drawer-body');
+  body.innerHTML = `
+    <span class="badge ${classBadgeClass(agent.class)}">${agent.class}</span>
+    <div class="section-copy" style="margin-top:8px;">${agent.description.intro || ''}</div>
+    <ul class="bullet-list">
+      ${(agent.description.bullets||[]).map(b=>`<li>${b}</li>`).join('')}
+    </ul>
+    <div class="divider"></div>
+    <div class="label">Tools it holds (${tools.length})</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+      ${tools.map(t=>`
+        <div class="card bordered">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <b style="font-size:11.5px;">${t.name}</b>
+            <span class="badge badge-neutral">${t.type||''}</span>
+          </div>
+          <div class="rytail-standard" style="color:var(--muted-foreground);margin-top:5px;">${t.description && t.description.intro ? t.description.intro : ''}</div>
+          <div style="display:flex;gap:12px;margin-top:6px;">
+            <span class="rytail-standard" style="color:var(--muted-foreground);">System: <b style="color:var(--foreground)">${t.system_touched||'—'}</b></span>
+            <span class="rytail-standard" style="color:var(--muted-foreground);">Access: <b style="color:var(--foreground)">${t.access||'—'}</b></span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  openDrawer();
+}
+
+// ---------- drawer open/close ----------
+function openDrawer(){
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('overlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+document.getElementById('overlay').addEventListener('click', closeDrawer);
+
+// ---------- page navigation ----------
+const crumbLabels = { overview: 'Overview', tasks: 'Task Workflow', agents: 'Agent Directory' };
+function goToPage(pageId){
+  document.querySelectorAll('.page').forEach(p=> p.classList.remove('active'));
+  document.getElementById('page-'+pageId).classList.add('active');
+  document.querySelectorAll('.nav-item[data-page]').forEach(n=>{
+    n.classList.toggle('active', n.dataset.page === pageId);
+  });
+  document.getElementById('crumbCurrent').textContent = crumbLabels[pageId];
+  document.getElementById('content').scrollTop = 0;
+}
+document.querySelectorAll('.nav-item[data-page]').forEach(item=>{
+  item.addEventListener('click', ()=> goToPage(item.dataset.page));
+});
+
+// ---------- agent class tabs ----------
+document.querySelectorAll('#agent-class-tabs .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#agent-class-tabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeAgentClassFilter = btn.dataset.class;
+    renderAgentCards();
+  });
+});
+
+// ---------- sidebar collapse ----------
+document.getElementById('collapseBtn').addEventListener('click', ()=>{
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('collapsed');
+  document.getElementById('collapseBtn').textContent = sb.classList.contains('collapsed') ? '›' : '‹';
+});
+
+// ---------- navbar scroll effect ----------
+document.getElementById('content').addEventListener('scroll', (e)=>{
+  document.getElementById('navbar').classList.toggle('scrolled', e.target.scrollTop > 4);
+});
+
+// ---------- init ----------
+renderOverview();
+renderDeptPills();
+renderTaskRows();
+renderAgentCards();
+
+</script>
+</body>
+</html>
